@@ -9,18 +9,15 @@ function InputField({
 }) {
   const handleSubmit = (e) => {
     e.preventDefault();
-
     addNoteHandler({
-      id: Math.floor(Math.random() * 100000),
       content: text,
     });
-
     setText("");
   };
 
-  const handleUpdate = (e) => {
+  const handleUpdate = (e, note) => {
     e.preventDefault();
-    updateNoteHandler();
+    updateNoteHandler(note);
   };
 
   return (

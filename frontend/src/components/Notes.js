@@ -1,8 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { deleteNote, getNotes } from "../api/api";
 
-function Notes({ notes, deleteNoteHandler, editNoteHandler }) {
-  const handleDelete = (note) => {
-    deleteNoteHandler(note.id);
+function Notes({ editNoteHandler }) {
+  const [notes, setNotes] = useState([]);
+
+  useEffect(() => {
+    const fetchNotes = async () => {
+      const notes = await getNotes();
+      setNotes(notes.data);
+    };
+    fetchNotes();
+  }, [notes]);
+
+  const handleDelete = async (note) => {
+    await deleteNote(note._id);
   };
 
   const handleEdit = (note) => {

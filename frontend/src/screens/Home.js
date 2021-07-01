@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { createNote, getNote, updateNote } from "../api/api";
 import Form from "../components/Form";
 
 import Notes from "../components/Notes";
@@ -7,43 +8,24 @@ function Home() {
   const [isEdit, setIsEdit] = useState(false);
   const [text, setText] = useState("");
   const [editItem, setEditItem] = useState(null);
-  const [notes, setNotes] = useState([
-    {
-      id: 1,
-      content: "first note",
-    },
-    {
-      id: 2,
-      content: "second note",
-    },
-    {
-      id: 3,
-      content: "third note",
-    },
-  ]);
+  const [notes, setNotes] = useState([]);
 
-  const addNoteHandler = (note) => {
-    const newNotes = [note, ...notes];
-    setNotes(newNotes);
+  const addNoteHandler = async (note) => {
+    const newNotes = await createNote(note);
+    setNotes(newNotes.data);
   };
 
-  const deleteNoteHandler = (id) => {
-    const remainingNotes = notes.filter((note) => note.id !== id);
-    setNotes([...remainingNotes]);
-  };
-
-  const updateNoteHandler = () => {
+  const updateNoteHandler = async () => {
     setIsEdit(false);
-    let copiedArray = [...notes];
-    copiedArray[editItem] = { ...copiedArray, content: text };
-    setNotes(copiedArray);
+    await updateNote(editItem._id, { content: text });
     setText("");
   };
-  const editNoteHandler = (note) => {
+
+  const editNoteHandler = async (note) => {
     setIsEdit(true);
     setText(note.content);
-    const noteToUpdate = notes.findIndex((item) => item.id === note.id);
-    setEditItem(noteToUpdate);
+    const noteToEdit = await getNote(note._id);
+    setEditItem(noteToEdit.data);
   };
 
   return (
@@ -56,11 +38,7 @@ function Home() {
         setText={setText}
         updateNoteHandler={updateNoteHandler}
       />
-      <Notes
-        notes={notes}
-        deleteNoteHandler={deleteNoteHandler}
-        editNoteHandler={editNoteHandler}
-      />
+      <Notes editNoteHandler={editNoteHandler} />
     </div>
   );
 }
