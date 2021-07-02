@@ -6,12 +6,13 @@ import {
   createNote,
   updateNote,
 } from "../controllers/notesContoller.js";
+import verify from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.route("/").get(getNotes);
-router.route("/:id").get(getNote).patch(updateNote).delete(deleteNote);
+router.route("/", verify).get(getNotes);
+router.route("/:id", verify).get(getNote).patch(updateNote).delete(deleteNote);
 
-router.route("/create").post(createNote);
+router.route("/create", verify).post(createNote);
 
 export default router;

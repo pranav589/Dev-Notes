@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { createNote, getNote, updateNote } from "../api/api";
+import { createNote, getNote, updateNote } from "../api/notesApi";
 import Form from "../components/Form";
 
 import Notes from "../components/Notes";
@@ -9,6 +9,7 @@ function Home() {
   const [text, setText] = useState("");
   const [editItem, setEditItem] = useState(null);
   const [notes, setNotes] = useState([]);
+  const [token, setToken] = useState("");
 
   const addNoteHandler = async (note) => {
     const newNotes = await createNote(note);

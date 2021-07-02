@@ -1,12 +1,20 @@
 import React, { useEffect, useState } from "react";
-import { deleteNote, getNotes } from "../api/api";
+import { deleteNote, getNotes } from "../api/notesApi";
 
 function Notes({ editNoteHandler }) {
   const [notes, setNotes] = useState([]);
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token_store");
+    setToken(token);
+  }, []);
 
   useEffect(() => {
     const fetchNotes = async () => {
-      const notes = await getNotes();
+      const notes = await getNotes({
+        headers: { Authorization: token },
+      });
       setNotes(notes.data);
     };
     fetchNotes();
@@ -30,6 +38,9 @@ function Notes({ editNoteHandler }) {
                 <div className="flex-1 pl-1 md:mr-16">
                   <div className="font-medium dark:text-white">
                     {note.content}
+                  </div>
+                  <div className="text-gray-400 text-sm">
+                    {note.date.split("T")[0]}
                   </div>
                 </div>
                 <div className="ml-6 flex items-center">
