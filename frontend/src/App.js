@@ -8,7 +8,6 @@ import {
 } from "react-router-dom";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
-
 import { verifyUser } from "./api/authApi";
 import Navbar from "./components/Navbar";
 
@@ -35,34 +34,32 @@ function App() {
   }, []);
 
   return (
-    <>
+    <Router>
       <Navbar
         setIsLoggedIn={setIsLoggedIn}
         isLoggedIn={isLoggedIn}
         userData={userData}
       />
-      <Router>
-        <Switch>
-          <Route path="/" exact>
-            {!isLoggedIn ? <Redirect to="/login" /> : <Home />}
-          </Route>
-          <Route path="/login">
-            {isLoggedIn ? (
-              <Redirect to="/" />
-            ) : (
-              <Login setIsLoggedIn={setIsLoggedIn} />
-            )}
-          </Route>
-          <Route path="/register">
-            {isLoggedIn ? (
-              <Redirect to="/" />
-            ) : (
-              <Register setIsLoggedIn={setIsLoggedIn} />
-            )}
-          </Route>
-        </Switch>
-      </Router>
-    </>
+      <Switch>
+        <Route path="/" exact>
+          {!isLoggedIn ? <Redirect to="/login" /> : <Home />}
+        </Route>
+        <Route path="/login">
+          {isLoggedIn ? (
+            <Redirect to="/" />
+          ) : (
+            <Login setIsLoggedIn={setIsLoggedIn} />
+          )}
+        </Route>
+        <Route path="/register">
+          {isLoggedIn ? (
+            <Redirect to="/" />
+          ) : (
+            <Register setIsLoggedIn={setIsLoggedIn} />
+          )}
+        </Route>
+      </Switch>
+    </Router>
   );
 }
 

@@ -73,7 +73,6 @@ const verifiedToken = (req, res) => {
     jwt.verify(token, process.env.TOKEN_SECRET, async (err, verified) => {
       if (err) return res.status(401).json("Token is not valid");
       const user = await User.findById(verified.id);
-
       if (!user) return res.status(401).json("Bad Request");
       return res.json(user);
     });
