@@ -21,7 +21,6 @@ function Register({ setIsLoggedIn }) {
       setPassword("");
       setUserName("");
       setIsLoggedIn(true);
-      console.log({ email, password, userName });
     } catch (error) {
       console.log(error);
     }
@@ -36,7 +35,7 @@ function Register({ setIsLoggedIn }) {
           </div>
           <form action="#" className="bg-white" onSubmit={handleRegister}>
             <div className="mt-5 bg-white">
-              <label for="userName" className="bg-white">
+              <label htmlFor="userName" className="bg-white">
                 Username
               </label>
               <input
@@ -48,7 +47,7 @@ function Register({ setIsLoggedIn }) {
               />
             </div>
             <div className="mt-5 bg-white">
-              <label for="email" className="bg-white">
+              <label htmlFor="email" className="bg-white">
                 Email
               </label>
               <input
@@ -60,7 +59,7 @@ function Register({ setIsLoggedIn }) {
               />
             </div>
             <div className="mt-5 bg-white">
-              <label for="password" className="bg-white">
+              <label htmlFor="password" className="bg-white">
                 Password
               </label>
               <input

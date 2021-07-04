@@ -8,10 +8,13 @@ import {
 } from "react-router-dom";
 import Login from "./screens/Login";
 import Register from "./screens/Register";
+
 import { verifyUser } from "./api/authApi";
+import Navbar from "./components/Navbar";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
     const checkLogin = async () => {
@@ -20,8 +23,8 @@ function App() {
         const verified = await verifyUser({
           headers: { Authorization: token },
         });
+        setUserData(verified.data);
 
-        console.log(verified);
         setIsLoggedIn(verified.data);
         if (!verified.data) return localStorage.clear();
       } else {
@@ -32,27 +35,34 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact>
-          {!isLoggedIn ? <Redirect to="/login" /> : <Home />}
-        </Route>
-        <Route path="/login">
-          {isLoggedIn ? (
-            <Redirect to="/" />
-          ) : (
-            <Login setIsLoggedIn={setIsLoggedIn} />
-          )}
-        </Route>
-        <Route path="/register">
-          {isLoggedIn ? (
-            <Redirect to="/" />
-          ) : (
-            <Register setIsLoggedIn={setIsLoggedIn} />
-          )}
-        </Route>
-      </Switch>
-    </Router>
+    <>
+      <Navbar
+        setIsLoggedIn={setIsLoggedIn}
+        isLoggedIn={isLoggedIn}
+        userData={userData}
+      />
+      <Router>
+        <Switch>
+          <Route path="/" exact>
+            {!isLoggedIn ? <Redirect to="/login" /> : <Home />}
+          </Route>
+          <Route path="/login">
+            {isLoggedIn ? (
+              <Redirect to="/" />
+            ) : (
+              <Login setIsLoggedIn={setIsLoggedIn} />
+            )}
+          </Route>
+          <Route path="/register">
+            {isLoggedIn ? (
+              <Redirect to="/" />
+            ) : (
+              <Register setIsLoggedIn={setIsLoggedIn} />
+            )}
+          </Route>
+        </Switch>
+      </Router>
+    </>
   );
 }
 

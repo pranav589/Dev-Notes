@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { createNote, getNote, updateNote } from "../api/notesApi";
+import React, { useEffect, useState } from "react";
+import { createNote, getNote, getNotes, updateNote } from "../api/notesApi";
 import Form from "../components/Form";
-
 import Notes from "../components/Notes";
 
 function Home() {
@@ -11,23 +10,65 @@ function Home() {
   const [notes, setNotes] = useState([]);
   const [token, setToken] = useState("");
 
+  useEffect(() => {
+    const tokenData = localStorage.getItem("token_store");
+    if (tokenData) {
+      setToken(tokenData);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
+
+  const fetchNotes = async () => {
+    const tokenData = localStorage.getItem("token_store");
+
+    if (tokenData) {
+      const notes = await getNotes({
+        headers: { Authorization: tokenData },
+      });
+      setNotes(notes.data);
+    }
+  };
+
   const addNoteHandler = async (note) => {
-    const newNotes = await createNote(note);
-    setNotes(newNotes.data);
+    await createNote(note, {
+      headers: { Authorization: token },
+    });
+    fetchNotes();
   };
 
   const updateNoteHandler = async () => {
     setIsEdit(false);
-    await updateNote(editItem._id, { content: text });
+    await updateNote(
+      editItem._id,
+      { content: text },
+      {
+        headers: { Authorization: token },
+      }
+    );
     setText("");
+    fetchNotes();
   };
 
   const editNoteHandler = async (note) => {
     setIsEdit(true);
     setText(note.content);
-    const noteToEdit = await getNote(note._id);
+    const noteToEdit = await getNote(note._id, {
+      headers: { Authorization: token },
+    });
     setEditItem(noteToEdit.data);
   };
+
+  const notesList = notes.map((note) => (
+    <Notes
+      note={note}
+      fetchNotes={fetchNotes}
+      editNoteHandler={editNoteHandler}
+      key={note._id}
+    />
+  ));
 
   return (
     <div className="flex flex-col items-center">
@@ -38,8 +79,9 @@ function Home() {
         text={text}
         setText={setText}
         updateNoteHandler={updateNoteHandler}
+        token={token}
       />
-      <Notes editNoteHandler={editNoteHandler} />
+      {notesList}
     </div>
   );
 }

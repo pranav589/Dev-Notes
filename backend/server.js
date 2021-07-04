@@ -3,7 +3,6 @@ import express from "express";
 import dotenv from "dotenv";
 import notes from "./routes/notesRoute.js";
 import auth from "./routes/authRoute.js";
-import verify from "./middleware/auth.js";
 import connectDB from "./config/db.js";
 const app = express();
 
@@ -13,7 +12,7 @@ connectDB();
 app.use(express.json());
 
 //Test Route
-app.get("/", verify, (req, res) => {
+app.get("/", (req, res) => {
   res.json(req.user);
 });
 

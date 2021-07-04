@@ -15,7 +15,6 @@ function Login({ setIsLoggedIn }) {
         email: email,
         password: password,
       });
-
       setEmail("");
       setPassword("");
       localStorage.setItem("token_store", response.data);
@@ -34,7 +33,7 @@ function Login({ setIsLoggedIn }) {
           </div>
           <form action="#" className="bg-white" onSubmit={handleLogin}>
             <div className="mt-5 bg-white">
-              <label for="email" className="bg-white">
+              <label htmlFor="email" className="bg-white">
                 Email
               </label>
               <input
@@ -46,7 +45,7 @@ function Login({ setIsLoggedIn }) {
               />
             </div>
             <div className="mt-5 bg-white">
-              <label for="password" className="bg-white">
+              <label htmlFor="password" className="bg-white">
                 Password
               </label>
               <input

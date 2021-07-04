@@ -10,9 +10,13 @@ import verify from "../middleware/auth.js";
 
 const router = express.Router();
 
-router.route("/", verify).get(getNotes);
-router.route("/:id", verify).get(getNote).patch(updateNote).delete(deleteNote);
+router.route("/").get(verify, getNotes);
+router
+  .route("/:id")
+  .get(verify, getNote)
+  .patch(verify, updateNote)
+  .delete(verify, deleteNote);
 
-router.route("/create", verify).post(createNote);
+router.route("/create").post(verify, createNote);
 
 export default router;

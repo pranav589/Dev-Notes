@@ -7,7 +7,7 @@ function InputField({
   setText,
   updateNoteHandler,
 }) {
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     addNoteHandler({
       content: text,

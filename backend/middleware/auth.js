@@ -5,9 +5,12 @@ const verify = (req, res, next) => {
   if (!token) return res.status(401).json("Access Denied.");
 
   try {
-    const verified = jwt.verify(token, process.env.TOKEN_SECRET);
-    req.user = verified;
-    next();
+    jwt.verify(token, process.env.TOKEN_SECRET, (err, user) => {
+      if (err) return res.status(400).json("Authorization not valid");
+
+      req.user = user;
+      next();
+    });
   } catch (error) {
     res.status(400).json("Invalid token");
   }
